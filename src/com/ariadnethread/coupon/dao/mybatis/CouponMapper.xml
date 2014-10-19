@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.ariadnethread.coupon.dao.mybatis.CouponDao">
+	
+	<!-- 按外键couponInfoId查询记录（多条） -->
+	<select id="findByCouponInfoId"  resultMap="CouponMap">
+		select <include refid="columns"/>  from coupon where type=#{couponInfoId}
+	</select>
+	
+	<!-- 修改剩余金额为0 -->
+	<update id="updateRemainValueToZero">
+		update coupon set remain_value=0 where _id in (#{ids})
+	</update>
+	
+	<!-- 修改剩余金额为指定金额 -->
+	<update id="updateRemainValueToSpecify">
+		update coupon set remain_value=#{1} where _id=#{0}  
+	</update>
+	
+	<!-- 修改剩余金额为加指定金额 -->
+	<update id="updateRemainValueAddSpecify">
+		update coupon set remain_value=remain_value+#{1} where _id=#{0}  
+	</update>
+	
+	<!-- 查询已领可支付红包 -->
+	<select id="findByUserContentId"  resultMap="CouponMap">
+		select <include refid="columns"/> from coupon c where c.remain_value>0 and expire_date >= CURDATE() and exists(select coupon_id from coupon_user cu where cu.coupon_id=c._id and cu.user_content_uid=#{0} and cu.activity_id=#{1}) order by expire_date DESC
+	</select>
+	
+	<!-- 统计已领红包记录金额  -->
+	 <select id="countCardValueByUserContentId" resultType="java.lang.Float" >
+		select sum(c.card_value) from coupon c where expire_date >= CURDATE() and exists(select coupon_id from coupon_user cu where cu.coupon_id=c._id and cu.user_content_uid=#{0}  and cu.activity_id=#{1})
+	 </select>
+	 
+	 <!-- 统计已领红包可用记录金额  -->
+	 <select id="countRemainValueByUserContentId" resultType="java.lang.Float" >
+		select sum(c.remain_value) from coupon c where expire_date >= CURDATE() and exists(select coupon_id from coupon_user cu where cu.coupon_id=c._id and cu.user_content_uid=#{0}  and cu.activity_id=#{1})
+	 </select>
+	
+	<!-- 新增领红包记录  -->
+	<insert id="save" parameterType="Coupon" >
+		<selectKey resultType="long" keyProperty="id">
+	      SELECT LAST_INSERT_ID()
+      	</selectKey>
+		insert into coupon (
+		<include refid="columns"/>)
+		values (#{id},#{couponId},#{couponNum},#{couponEncode},#{type},#{sold},#{cardCount},#{remainCount},#{cardValue},#{remainValue},#{expireDate},#{createTime},#{maker},#{note},#{channelId},#{del},#{redEnvelopId})
+	</insert>
+	
+  <!--结果映射-->
+  <resultMap type="Coupon" id="CouponMap">
+    <id column="_id" property="id"/>
+    <result column="coupon_id" property="couponId"/>
+    <result column="coupon_num" property="couponNum"/>
+    <result column="coupon_encode" property="couponEncode"/>
+    <result column="type" property="type"/>
+    <result column="sold" property="sold"/>
+    <result column="card_count" property="cardCount"/>
+    <result column="remain_count" property="remainCount"/>
+    <result column="card_value" property="cardValue"/>
+    <result column="remain_value" property="remainValue"/>
+    <result column="expire_date" property="expireDate"/>
+    <result column="create_time" property="createTime"/>
+    <result column="maker" property="maker"/>
+    <result column="note" property="note"/>
+    <result column="channel_id" property="channelId"/>
+    <result column="del" property="del"/>
+    <result column="red_envelop_id" property="redEnvelopId"/>
+  </resultMap>
+  
+  <!--查询字段-->
+  <sql id="columns"> `_id`,`coupon_id`,`coupon_num`,`coupon_encode`,`type`,`sold`,`card_count`,`remain_count`,`card_value`,`remain_value`,`expire_date`,`create_time`,`maker`,`note`,`channel_id`,`del`,`red_envelop_id` </sql>
+  
+</mapper> 

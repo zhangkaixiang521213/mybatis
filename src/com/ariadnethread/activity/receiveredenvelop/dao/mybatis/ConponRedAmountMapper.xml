@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.ariadnethread.activity.receiveredenvelop.dao.mybatis.ConponRedAmountDao">
+	
+	<!-- 
+	SELECT <include refid="columns"/> FROM `coupon_red_amount` AS t1 JOIN (SELECT  ROUND(RAND() * ((SELECT  MAX(id) FROM `coupon_red_amount` where quantity>received_quantity) - (SELECT  MIN(id) FROM `coupon_red_amount`  where quantity>received_quantity)) + (SELECT  MIN(id) FROM `coupon_red_amount`  where quantity>received_quantity)) AS id ) AS t2 WHERE t1.id >= t2.id and t1.quantity>t1.received_quantity ORDER BY t1.id LIMIT 1 ;
+	 -->
+	<!-- 随机抽取金额  -->
+	<select id="searchRandomAmount"   resultMap="ConponRedAmountMap">
+		SELECT <include refid="columns"/> FROM coupon_red_amount where quantity>received_quantity and activity_id=#{activityId} ORDER BY RAND() LIMIT 1
+	</select>
+	
+	 <!-- 新增红包金额记录(批量提交)-->
+	<insert id="saveBatch" parameterType="ConponRedAmount" >
+		insert into coupon_red_amount (
+		<include refid="columns"/>)
+		values 
+		<foreach collection="list" item="item" index="index" separator="," >  
+	        (#{item.id},#{item.activityId},#{item.redAmount},#{item.quantity},#{item.receivedQuantity},#{item.totalAmount},#{item.description},#{item.createTime})  
+	    </foreach> 
+	</insert>
+	
+	<!-- 新增红包金额记录 -->
+	<insert id="save" parameterType="ConponRedAmount" >
+		insert into coupon_red_amount (
+		<include refid="columns"/>)
+		values values (#{id},#{activityId},#{redAmount},#{quantity},#{receivedQuantity},#{totalAmount},#{description},#{createTime})
+	</insert>
+	
+	<!-- 修改红包抽取量-->
+	<update id="update" parameterType="map">
+	    UPDATE coupon_red_amount set received_quantity=received_quantity+1  WHERE id = #{id}
+  </update>
+	
+  <!--结果映射-->
+  <resultMap type="ConponRedAmount" id="ConponRedAmountMap">
+    <id column="id" property="id"/>
+    <result column="activity_id" property="activityId"/>
+    <result column="red_amount" property="redAmount"/>
+    <result column="quantity" property="quantity"/>
+    <result column="received_quantity" property="receivedQuantity"/>
+    <result column="total_amount" property="totalAmount"/>
+    <result column="description" property="description"/>
+    <result column="create_time" property="createTime"/>
+  </resultMap>
+  
+  <!--查询字段-->
+  <sql id="columns"> id,activity_id,red_amount,quantity,received_quantity,total_amount,description,create_time </sql>
+  
+</mapper> 

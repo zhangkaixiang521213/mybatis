@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.ariadnethread.register.dao.mybatis.TsmsmtLogDao">
+	
+	<!-- 按电话号码、类型查询记录  -->
+	<select id="searchByMobileType"   resultMap="TsmsmtLogMap">
+		select <include refid="columns"/> from t_sms_mt_log where mobile=#{0} and type=#{1} order by create_time desc
+	</select>
+	
+	<!-- 新增短信发送日志记录  -->
+	<insert id="save" parameterType="TsmsmtLog" >
+		insert into t_sms_mt_log (
+		<include refid="columns"/>)
+		values (#{id},#{mobile},#{type},#{content},#{validCode},#{status},#{createTime},#{sendStatus},#{destId},#{reportTime},#{statusCode},#{statusText},#{srcId},#{sendTime})
+	</insert>
+	
+  <!--结果映射-->
+  <resultMap type="TsmsmtLog" id="TsmsmtLogMap">
+    <id column="id" property="id"/>
+    <result column="mobile" property="mobile"/>
+    <result column="type" property="type"/>
+    <result column="content" property="content"/>
+    <result column="valid_code" property="validCode"/>
+    <result column="status" property="status"/>
+    <result column="create_time" property="createTime"/>
+    <result column="sendstatus" property="sendStatus"/>
+    <result column="destid" property="destId"/>
+    <result column="reporttime" property="reportTime"/>
+    <result column="statuscode" property="statusCode"/>
+    <result column="statustext" property="statusText"/>
+    <result column="srcid" property="srcId"/>
+    <result column="sendtime" property="sendTime"/>
+  </resultMap>
+  
+  <!--查询字段-->
+  <sql id="columns"> id,mobile,type,content,valid_code,status,create_time,sendstatus,destid,reporttime,statuscode,statustext,srcid,sendtime </sql>
+  
+</mapper> 

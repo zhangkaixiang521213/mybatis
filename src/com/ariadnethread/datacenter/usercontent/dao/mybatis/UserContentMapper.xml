@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.ariadnethread.datacenter.usercontent.dao.mybatis.UserContentDao">
+	
+	<!-- 按SESSION_ID查询记录  -->
+	<select id="searchBySessionId"   resultMap="UserContentMap">
+		select <include refid="columns"/> from Usercontent where LastSession=#{sessionId}
+	</select>
+	
+	<!-- 按用户ID查询记录  -->
+	<select id="searchByUserId"   resultMap="UserContentMap">
+		select <include refid="columns"/> from Usercontent where UID=#{userId}
+	</select>
+	
+	<!-- 按username查询记录  -->
+	<select id="searchByUserName"   resultMap="UserContentMap">
+		select <include refid="columns"/> from Usercontent where username=#{userName}
+	</select>
+	
+	<!-- 修改用户登陆信息-->
+	<update id="update" parameterType="UserContent">
+	    UPDATE Usercontent set LastSession=#{lastSession},Logintime=#{loginTime} where uid = #{uid}
+  </update>
+  
+  <!-- 新增用户记录  -->
+	<insert id="save" parameterType="UserContent" >
+		<selectKey resultType="long" keyProperty="uid">
+	      SELECT LAST_INSERT_ID()
+	     	</selectKey>
+		insert into Usercontent (
+		<include refid="columns"/>)
+		values (#{uid},#{userName},#{vipAccount},#{lastIP},#{lastSession},#{loginTime},#{alipayId},#{channel},#{location},#{createTime},#{del})
+	</insert>
+	
+  <!--结果映射-->
+  <resultMap type="UserContent" id="UserContentMap">
+    <id column="uid" property="uid"/>
+    <result column="username" property="userName"/>
+    <result column="vip_account" property="vipAccount"/>
+    <result column="LastIP" property="lastIP"/>
+    <result column="LastSession" property="lastSession"/>
+    <result column="Logintime" property="loginTime"/>
+    <result column="alipay_id" property="alipayId"/>
+    <result column="channel" property="channel"/>
+    <result column="Location" property="location"/>
+    <result column="create_time" property="createTime"/>
+    <result column="Del" property="del"/>
+  </resultMap>
+  
+  <!--查询字段-->
+  <sql id="columns"> UID,Username,vip_account,LastIP,LastSession,Logintime,alipay_id,channel,Location,Createtime,Del </sql>
+  
+</mapper> 

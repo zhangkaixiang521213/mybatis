@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.ariadnethread.activity.dao.mybatis.ActivityDao">
+	 <!-- 按活动ID查询记录（一条） -->
+	<select id="findById"  resultMap="ActivityMap">
+		SELECT <include refid="columns"/>  FROM activity where aid=#{aid}
+	</select>
+	
+	<!-- 按活动类型查询记录（多条） -->
+	<select id="findByActivityType"  resultMap="ActivityMap">
+		SELECT <include refid="columns"/>  FROM activity where activity_type=#{activity_type}
+	</select>
+	
+  <!--结果映射-->
+  <resultMap type="Activity" id="ActivityMap">
+    <id column="aid" property="aid"/>
+    <result column="activity_content" property="activityContent"/>
+    <result column="description" property="description"/>
+    <result column="content" property="content"/>
+    <result column="pic_small" property="picSmall"/>
+    <result column="pic_mid" property="picMid"/>
+    <result column="pic_big" property="picBig"/>
+    <result column="activity_url" property="activityUrl"/>
+    <result column="order_type" property="orderType"/>
+    <result column="need_register" property="needRegister"/>
+    <result column="platforms" property="platforms"/>
+    <result column="city_ids" property="cityIds"/>
+    <result column="cinema_ids" property="cinemaIds"/>
+    <result column="film_ids" property="filmIds"/>
+    <result column="quote_ids" property="quoteIds"/>
+    <result column="screen_type" property="screenType"/>
+    <result column="coupon_ids" property="couponIds"/>
+    <result column="activity_price" property="activityPrice"/>
+    <result column="show_type" property="showType"/>
+    <result column="start_time" property="startTime"/>
+    <result column="end_time" property="endTime"/>
+    <result column="top_begin_time" property="topBeginTime"/>
+    <result column="top_end_time" property="topEndTime"/>
+    <result column="activity_count" property="activityCount"/>
+    <result column="activity_remain" property="activityRemain"/>
+    <result column="cnt_per_order" property="cntPerOrder"/>
+    <result column="gift_per_good" property="giftPerGood"/>
+    <result column="order_per_user" property="orderPerUser"/>
+    <result column="total_per_user" property="totalPerUser"/>
+    <result column="can_buy_more" property="canBuyMore"/>
+    <result column="fake_count" property="fakeCount"/>
+    <result column="channel_groups" property="channelGroups"/>
+    <result column="channel_ids" property="channelIds"/>
+    <result column="uid" property="uid"/>
+    <result column="visible" property="visible"/>
+    <result column="create_time" property="createTime"/>
+    <result column="del" property="del"/>
+    <result column="cnt_per_user" property="cntPerUser"/>
+    <result column="isvip" property="isvip"/>
+    <result column="expire_days" property="expireDays"/>
+  </resultMap>
+  
+  <!--查询字段-->
+  <sql id="columns"> `aid`,`activity_content`,`description`,`content`,`pic_small`,`pic_mid`,`pic_big`,`activity_url`,`activity_type`,`order_type`,`need_register`,`platforms`,`city_ids`,`cinema_ids`,`film_ids`,`quote_ids`,`screen_type`,`coupon_ids`,`activity_price`,`show_type`,`start_time`,`end_time`,`top_begin_time`,`top_end_time`,`activity_count`,`activity_remain`,`cnt_per_order`,`gift_per_good`,`order_per_user`,`total_per_user`,`can_buy_more`,`fake_count`,`channel_groups`,`channel_ids`,`uid`,`visible`,`create_time`,`del`,`cnt_per_user`,`isvip`,`expire_days` </sql>
+  
+</mapper> 

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.ariadnethread.coupon.dao.mybatis.CouponPayLogDao">
+	
+	<!-- 按订单号查询记录 -->
+	<select id="findByOrderNo"  resultMap="CouponPayLogMap">
+		select <include refid="columns"/>  from coupon_pay_log where order_no=#{orderNo}
+	</select>
+	
+	<!-- 按订单号和状态查询记录 -->
+	<select id="findByOrderNoAndStatus"  resultMap="CouponPayLogMap">
+		select <include refid="columns"/>  from coupon_pay_log where order_no=#{0} and status!=#{1}
+	</select>
+	
+	<!-- 修改为退款状态 -->
+	<update id="updateStatusToRefund">
+		update coupon_pay_log set status=#{1} where order_no=#{0}  
+	</update>
+	
+	<!-- 统计指定天支付总额度 -->
+	<select id="countPayMoneyByDate" resultType="java.lang.Float">
+		select sum(pay_value) from coupon_pay_log where status=#{0} and date_format(pay_time,'%Y-%m-%d')=#{1}
+	</select>
+	
+	<!-- 增加券支付日志  -->
+	<insert id="save" parameterType="CouponPayLog" >
+		insert into coupon_pay_log (
+		<include refid="columns"/>)
+		values (#{id},#{userId},#{activityId},#{orderNo},#{couponId},#{payValue},#{description},#{createTime},#{status},#{redEnvelopId},#{payTime},#{remainValue})
+	</insert>
+	
+	<!-- 增加券支付日志(批量提交)-->
+	<insert id="saveBatch" parameterType="CouponPayLog" >
+		insert into coupon_pay_log (
+		<include refid="columns"/>)
+		values 
+		<foreach collection="list" item="item" index="index" separator="," >  
+	        (#{item.id},#{item.userId},#{item.activityId},#{item.orderNo},#{item.couponId},#{item.payValue},#{item.description},#{item.createTime},#{item.status},#{item.redEnvelopId},#{item.payTime},#{item.remainValue})  
+	    </foreach> 
+	</insert>
+	
+  <!--结果映射-->
+  <resultMap type="CouponPayLog" id="CouponPayLogMap">
+    <id column="id" property="id"/>
+    <result column="user_id" property="userId"/>
+    <result column="activity_id" property="activityId"/>
+    <result column="order_no" property="orderNo"/>
+    <result column="coupon_id" property="couponId"/>
+    <result column="pay_value" property="payValue"/>
+    <result column="description" property="description"/>
+    <result column="create_time" property="createTime"/>
+    <result column="status" property="status"/>
+    <result column="red_envelop_id" property="redEnvelopId"/>
+    <result column="pay_time" property="payTime"/>
+    <result column="remain_value" property="remainValue"/>
+  </resultMap>
+  
+  <!--查询字段-->
+  <sql id="columns"> id,user_id,activity_id,order_no,coupon_id,pay_value,description,create_time,status,red_envelop_id,pay_time,remain_value </sql>
+  
+</mapper> 
