@@ -13,13 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.ariadnethread.activity.receiveredenvelop.utils.ReceiveConstants;
-import com.ariadnethread.utils.ParameterValidate;
-import com.ariadnethread.utils.Results;
-
-import core.utils.PropertiesUtil;
-import core.utils.jackson.JacksonUtil;
-
 public class CharacterEncodingFilter implements Filter {
 	private static Logger logger = LoggerFactory.getLogger(CharacterEncodingFilter.class);
 	private FilterConfig filterConfig;
@@ -38,13 +31,13 @@ public class CharacterEncodingFilter implements Filter {
 			FilterChain chain) throws IOException, ServletException {
 	    HttpServletRequest rqt = (HttpServletRequest) request;
 	    
-	    logger.info(rqt.getScheme()+"://"+rqt.getServerName()+":"+rqt.getServerPort()+rqt.getContextPath());
-	    //参数合法校验
-	    String enc=rqt.getHeader("enc");
-		if(enc!=null && !"".equals(enc) && "true".equalsIgnoreCase(PropertiesUtil.getPropByKey("para_enc_validate"))  && !new ParameterValidate().validate(rqt, enc)){
-			response.getWriter().write(new JacksonUtil().getJson(new Results(ReceiveConstants.API_RETURN_STATUS.PARAMETER_MD5_ERROR.value(),ReceiveConstants.API_RETURN_STATUS.PARAMETER_MD5_ERROR.desc())));
-			return;
-		}
+//	    logger.info(rqt.getScheme()+"://"+rqt.getServerName()+":"+rqt.getServerPort()+rqt.getContextPath());
+//	    //参数合法校验
+//	    String enc=rqt.getHeader("enc");
+//		if(enc!=null && !"".equals(enc) && "true".equalsIgnoreCase(PropertiesUtil.getPropByKey("para_enc_validate"))  && !new ParameterValidate().validate(rqt, enc)){
+//			response.getWriter().write(new JacksonUtil().getJson(new Results(ReceiveConstants.API_RETURN_STATUS.PARAMETER_MD5_ERROR.value(),ReceiveConstants.API_RETURN_STATUS.PARAMETER_MD5_ERROR.desc())));
+//			return;
+//		}
 		
 	    
     	String method = rqt.getMethod();

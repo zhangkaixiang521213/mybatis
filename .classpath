@@ -69,5 +69,7 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="WebApp/WEB-INF/lib/sls_java_sdk_v_0.3.0.jar"/>
+	<classpathentry kind="lib" path="WebApp/WEB-INF/lib/spymemcached-2.8.4.jar"/>
 	<classpathentry kind="output" path="WebApp/WEB-INF/classes"/>
 </classpath>

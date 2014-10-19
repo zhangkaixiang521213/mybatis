@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project name="movies" basedir="."> 
+<project name="mybatis" basedir="."> 
   <!-- define property -->  
   <property file="build.properties"/>  
   <property name="web" value="WebApp"/>   
@@ -38,7 +38,7 @@
   </target>  
   <!-- compile all src path code and xml,properites file compiler="javac1.6"  -->  
   <target name="all-compile" depends="clean,prepare"> 
-    <javac  fork="true" executable="D:\program tools\develop\jdk1.6.0_18\bin\javac" srcdir="${all.src.path}" destdir="${build.classes}" deprecation="${compile.deprecation}" optimize="${compile.optimize}" encoding="${compile.encoding}" debug="true" debuglevel="vars" classpathref="lib.path"  memoryinitialsize="64m" memorymaximumsize="128m" includeantruntime="false"></javac>  
+    <javac  fork="true" executable="D:\program tools\programs\Work\jdk1.6.0_18\bin\javac" srcdir="${all.src.path}" destdir="${build.classes}" deprecation="${compile.deprecation}" optimize="${compile.optimize}" encoding="${compile.encoding}" debug="true" debuglevel="vars" classpathref="lib.path"  memoryinitialsize="64m" memorymaximumsize="128m" includeantruntime="false"></javac>  
     <foreach target="compile-xml-properties" param="src.path" list="${all.src.path}" delimiter=";"/> 
   </target>  
   <!-- compile xml,properites file -->  
@@ -49,7 +49,7 @@
         <include name="**/*.xml"/>  
         <include name="**/*.zip"/>  
         <exclude name="*_zh_CN.properties"/>  
-        <exclude name="**/test-*.xml"/> 
+        <exclude name="**/test-*.xml"/>
       </fileset> 
     </copy>  
     <native2ascii src="${src.path}" dest="${build.classes}" encoding="${compile.encoding}"> 
@@ -79,7 +79,11 @@
       <fileset dir="${web}">  
         <exclude name="**/web.xml"/>  
         <exclude name="**/*.EXAMPLE"/>  
-        <exclude name="**/*.README"/>  
+        <exclude name="**/*.README"/> 
+      	<!--
+      	<exclude name="doc/"/>
+      	<exclude name="WEB-INF/lib/"/>
+      	-->
       </fileset>  
   	<!--<fileset dir="." file="${war.buildnumber}"/>   -->  
       <fileset dir="." file="*.txt"/> 

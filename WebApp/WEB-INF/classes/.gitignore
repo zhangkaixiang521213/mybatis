@@ -1,9 +1,3 @@
-/application.properties
-/applicationContext.xml
-/com
-/core
-/log4jdbc.properties
-/logDBScript.txt
-/logback.xml
-/sql
 /test
+/core
+/zhangkaix

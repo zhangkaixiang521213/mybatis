@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="zhangkaix.mybatistt.dao.mybatis.MytestDao">
+
+	 <!-- 查询一条记录 -->
+	<select id="findById"  resultMap="MytestMap">
+		SELECT <include refid="columns"/>  FROM mytest where id=#{id}
+	</select>
+	
+	<!-- 多条件查询 -->
+	<select id="searchByPara"  parameterType="map" resultMap="MytestMap">
+		SELECT <include refid="columns"/> FROM mytest where para1=#{para1} and para3=#{para3}  
+	</select>
+	
+	<!-- 多条件查询 -->
+	<select id="searchByParas" parameterType="map"  resultMap="MytestMap">
+		SELECT <include refid="columns"/> FROM mytest where para1=#{para1} and para3=#{para2}  
+	</select>
+	
+	
+	 <!-- 新增记录  -->
+	<insert id="save" parameterType="Mytest" >
+		<selectKey resultType="long" keyProperty="id">
+	      SELECT LAST_INSERT_ID()
+      	</selectKey>
+		insert into mytest (
+		<include refid="columns"/>)
+		values (#{id},#{mydatetime},#{para1},#{para2},#{para3},#{para4},#{para5})
+	</insert>
+	
+	<!-- 修改记录-->
+	<update id="updateAllColums" parameterType="Mytest">
+	    UPDATE mytest 
+	    <set>
+	      <if test="id != null">id = #{id}, </if>
+	      <if test="mydatetime != null">mydatetime = #{mydatetime}, </if>
+	      <if test="para1 != null">para1 = #{para1}, </if>
+	      <if test="para2 != null">para2 = #{para2}, </if>
+	      <if test="para3 != null">para3 = #{para3}, </if>
+	      <if test="para4 != null">para4 = #{para4}, </if>
+	      <if test="para5 != null">para5 = #{para5}, </if>
+	    </set>
+	    WHERE id = #{id}
+  </update>
+  
+  <!-- 修改领红包记录-->
+	<update id="update" parameterType="Mytest">
+	    UPDATE mytest set para1=#{0} where id in(#{1})
+	</update>
+	
+  <!--结果映射-->
+  <resultMap type="Mytest" id="MytestMap">
+    <id column="id" property="id"/>
+    <result column="mydatetime" property="mydatetime"/>
+    <result column="para1" property="para1"/>
+    <result column="para2" property="para2"/>
+    <result column="para3" property="para3"/>
+    <result column="para4" property="para4"/>
+    <result column="para5" property="para5"/>
+  </resultMap>
+  
+  <!--查询字段-->
+  <sql id="columns"> id,mydatetime,para1,para2,para3,para4,para5 </sql>
+  
+</mapper> 

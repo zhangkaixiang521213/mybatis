@@ -15,7 +15,7 @@
 	<description>Spring公共配置 </description>
 
 	<!-- 使用annotation 自动注册bean, 并保证@Required、@Autowired的属性被注入 -->
-	<context:component-scan base-package="com.ariadnethread">
+	<context:component-scan base-package="zhangkaix">
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 		<context:exclude-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
 	</context:component-scan>
@@ -28,13 +28,13 @@
             <ref bean="pageInterceptor"/>  
         </property>  
 		<!-- 自动扫描domain目录, 配置包的基路径即可，多个包用;分割 -->
-		<property name="typeAliasesPackage" value="com.ariadnethread" />
+		<property name="typeAliasesPackage" value="zhangkaix" />
 		<!-- 显式指定Mapper文件位置 -->	
 		<property name="mapperLocations" value="classpath*:**/mybatis/*Mapper.xml" />
 	</bean>
 	<!-- 扫描basePackage下所有以@MyBatisRepository标识的 接口-->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="com.ariadnethread" />
+		<property name="basePackage" value="zhangkaix" />
 		<property name="annotationClass" value="core.mybatis.MyBatisRepository"/>
 	</bean>
 	
@@ -73,7 +73,7 @@
 	
 	<!-- 以AspectJ方式 定义 AOP 用于事务拦截 -->
 	<aop:config proxy-target-class="true">
-		<aop:advisor pointcut="execution(* com.ariadnethread.*.service.*Service*.*(..))" advice-ref="txAdvice" />
+		<aop:advisor pointcut="execution(* zhangkaix.*.service.*Service*.*(..))" advice-ref="txAdvice" />
 	</aop:config>
 
 	<!-- 基本事务定义,使用transactionManager作事务管理 -->
